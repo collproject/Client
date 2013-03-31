@@ -74,6 +74,7 @@ public class CategoryPanel extends AbstractPanel{
         setLayout(new BorderLayout());
         scrollPane = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        setMinimumSize(new Dimension(50, 50));
     }
 
     public JTree getTree() {
