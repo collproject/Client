@@ -53,6 +53,7 @@ public class MakerPanel extends AbstractPanel{
         panelList.setLayout(new BorderLayout());
         scrollPane = new JScrollPane(makerList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        setMinimumSize(new Dimension(40, 40));
     }
 
     @Override

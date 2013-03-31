@@ -5,6 +5,7 @@
 package com.pb.shop.client.panels;
 
 import com.pb.shop.client.action.ProductAddCategoryController;
+import com.pb.shop.client.action.ProductAddMakerController;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -147,6 +148,7 @@ public class ProductConfPanel extends AbstractPanel{
             super.configComponents(); 
             panelButton.setLayout(new GridLayout(1, 2));
             buttonCtegory.addActionListener(new ProductAddCategoryController(this));
+            buttonMaker.addActionListener(new ProductAddMakerController(this));
         }
 
         @Override
