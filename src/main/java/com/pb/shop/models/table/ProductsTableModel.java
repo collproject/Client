@@ -23,7 +23,7 @@ public class ProductsTableModel extends AbstractTableModel {
     private List<Category> categories;
     private Map<Integer, String> makersNames;
     private Map<Integer, String> categoriesNames;
-    private static String [] columnsNames = new String[]{"ИН", "Имя", "Категория", "Производитель", "Цена", "Наличие"}; 
+    private static String [] columnsNames = new String[]{"ИН", "Название", "Категория", "Производитель", "Цена", "Наличие"}; 
 
     public ProductsTableModel(List<Product> products, List<Maker> makers, List<Category> categorys) {
         this.products = products;
