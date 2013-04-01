@@ -44,7 +44,6 @@ public class ProductAddDialog extends JDialog{
         buttonOk = new JButton("Ок");
         panelButton = new JPanel();
         panel = new JPanel();
-        
     }
 
     private void configComponents() {
