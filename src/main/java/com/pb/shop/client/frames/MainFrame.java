@@ -83,7 +83,7 @@ public class MainFrame extends JFrame {
         panelUp = new JPanel(new BorderLayout());
         mainMenu = new MainMenu();
         
-        searchController = new SearchController();
+        searchController = new SearchController(this);
         addProductController = new AddProductController(this);
         editProductController = new EditProductController(this);
         
@@ -137,6 +137,11 @@ public class MainFrame extends JFrame {
         setContentPane(panel);
         setJMenuBar(mainMenu);
     }
+
+    public ResultPanel getResultPanel() {
+        return resultPanel;
+    }
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
 

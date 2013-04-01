@@ -36,5 +36,10 @@
       <artifactId>miglayout-swt</artifactId>
       <version>4.2</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>shop-model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
