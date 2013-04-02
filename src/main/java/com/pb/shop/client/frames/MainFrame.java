@@ -7,6 +7,7 @@ package com.pb.shop.client.frames;
 
 import com.pb.shop.client.action.AddProductController;
 import com.pb.shop.client.action.EditProductController;
+import com.pb.shop.client.action.MenuConnectController;
 import com.pb.shop.client.action.SearchController;
 import com.pb.shop.client.panels.CategoryPanel;
 import com.pb.shop.client.panels.DescriptionPanel;
@@ -51,6 +52,7 @@ public class MainFrame extends JFrame {
     private SearchController searchController;
     private AddProductController addProductController;
     private EditProductController editProductController;
+    private MenuConnectController menuConnectController;
     
     private JSplitPane jspLeft;
     private JSplitPane jspRight;
@@ -86,6 +88,7 @@ public class MainFrame extends JFrame {
         searchController = new SearchController(this);
         addProductController = new AddProductController(this);
         editProductController = new EditProductController(this);
+        menuConnectController = new MenuConnectController(this);
         
         jspLeft = new JSplitPane();
         jspRight = new JSplitPane();
@@ -96,6 +99,7 @@ public class MainFrame extends JFrame {
         searchPanel.getSearchButton().addActionListener(searchController);
         resultPanel.getAddButton().addActionListener(addProductController);
         resultPanel.getEditButton().addActionListener(editProductController);
+        mainMenu.getItemConnect().addActionListener(menuConnectController);
         
         categoryPanel.setMinimumSize(new Dimension(100, 100));
         makerPanel.setMinimumSize(new Dimension(100, 100));
@@ -142,6 +146,9 @@ public class MainFrame extends JFrame {
         return resultPanel;
     }
     
+    public CategoryPanel getCategoryPanel() {
+        return categoryPanel;
+    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
 

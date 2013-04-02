@@ -59,7 +59,7 @@ public class ProductsTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return products.get(rowIndex).getCatID();
+                return products.get(rowIndex).getProdID();
             case 1:
                 return products.get(rowIndex).getProdName();
             case 2:
