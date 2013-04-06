@@ -86,8 +86,7 @@ public class Client {
             
             //Получаем файл с изображением
             File file = new File(imageFileName);
-            FileInputStream imageInFile = 
-                    imageInFile = new FileInputStream(file);
+            FileInputStream imageInFile = new FileInputStream(file);
             
             //Получаем массив байт в который помещаем файл с изображением
             byte imageData[] = new byte[(int) file.length()];
