@@ -45,6 +45,11 @@ public class DescriptionPanel extends AbstractPanel {
         descText = new JTextArea();
         jsp = new JSplitPane();
         imageIcon = new ImageIcon("D:\\test.png");
+//        try {
+//            imageIcon = new ImageIcon(new URL("http://localhost:7375/shop-app-server/admin/photo2"));
+//        } catch (MalformedURLException ex) {
+//            Logger.getLogger(DescriptionPanel.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         panelLeft = new JPanel();
     }
 
