@@ -10,6 +10,7 @@ import com.pb.shop.model.Maker;
 import com.pb.shop.model.MakersList;
 import com.pb.shop.model.Product;
 import com.pb.shop.model.ProductsList;
+import com.pb.shop.model.UserException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -100,7 +101,7 @@ public class Client {
             is = httpConnection.getInputStream();
             
         } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if(is != null)
@@ -108,10 +109,12 @@ public class Client {
                 if(outputStream != null)
                     outputStream.close();
             } catch (IOException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
             }
         }
     }
+    
+    
 
     public static void main(String[] args) {
         Client client = new Client("http://localhost:7375/shop-app-server/admin");
