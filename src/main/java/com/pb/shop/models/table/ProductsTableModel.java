@@ -23,7 +23,7 @@ public class ProductsTableModel extends AbstractTableModel {
     private List<Category> categories;
     private Map<Integer, String> makersNames;
     private Map<Integer, String> categoriesNames;
-    private static String [] columnsNames = new String[]{"ИН", "Имя", "Категория", "Производитель", "Цена", "Наличие"}; 
+    private static String [] columnsNames = new String[]{"ИН", "Название", "Категория", "Производитель", "Цена", "Наличие"}; 
 
     public ProductsTableModel(List<Product> products, List<Maker> makers, List<Category> categorys) {
         this.products = products;
@@ -59,7 +59,7 @@ public class ProductsTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return products.get(rowIndex).getCatID();
+                return products.get(rowIndex).getProdID();
             case 1:
                 return products.get(rowIndex).getProdName();
             case 2:
