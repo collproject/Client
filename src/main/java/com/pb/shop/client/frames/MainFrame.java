@@ -8,6 +8,7 @@ package com.pb.shop.client.frames;
 import com.pb.shop.client.action.AddProductController;
 import com.pb.shop.client.action.EditProductController;
 import com.pb.shop.client.action.SearchController;
+import com.pb.shop.client.action.TestListContrller;
 import com.pb.shop.client.panels.CategoryPanel;
 import com.pb.shop.client.panels.DescriptionPanel;
 import com.pb.shop.client.panels.MainMenu;
@@ -67,6 +68,8 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
+        
+        makerPanel.getButtonAdd().addActionListener(new TestListContrller(this));
     }
 
     private void initComponents() {
@@ -140,6 +143,10 @@ public class MainFrame extends JFrame {
 
     public ResultPanel getResultPanel() {
         return resultPanel;
+    }
+    
+    public MakerPanel getMakerPanel(){
+        return makerPanel;
     }
     
     public static void main(String[] args) {
