@@ -103,6 +103,7 @@ public class MainFrame extends JFrame {
         resultPanel.getAddButton().addActionListener(addProductController);
         resultPanel.getEditButton().addActionListener(editProductController);
         mainMenu.getItemConnect().addActionListener(menuConnectController);
+        mainMenu.getItemConnect().addActionListener(new TestListContrller(this));
         
         categoryPanel.setMinimumSize(new Dimension(100, 100));
         makerPanel.setMinimumSize(new Dimension(100, 100));
