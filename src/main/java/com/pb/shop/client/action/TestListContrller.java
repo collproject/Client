@@ -4,10 +4,10 @@
  */
 package com.pb.shop.client.action;
 
-import com.pb.shop.client.Client;
+import com.pb.shop.client.api.Client;
 import com.pb.shop.client.frames.MainFrame;
 import com.pb.shop.model.Maker;
-import com.pb.shop.models.table.MakersJListModel;
+import com.pb.shop.data.models.MakersJListModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;

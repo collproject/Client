@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pb.shop.models.table;
+package com.pb.shop.data.models;
 
 import com.pb.shop.model.Category;
 import com.pb.shop.model.Maker;
