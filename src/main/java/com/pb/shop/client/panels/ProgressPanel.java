@@ -31,7 +31,7 @@ public class ProgressPanel extends AbstractPanel {
     protected void configComponents() {
         panel.setLayout(new BorderLayout());
         setLayout(new BorderLayout());
-        progressBar.setIndeterminate(true);
+        progressBar.setIndeterminate(false);
 //        new Thread (new Runnable() {
 //
 //            @Override

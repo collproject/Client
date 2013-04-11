@@ -92,6 +92,10 @@ public class CategoriesTreeModel extends DefaultTreeModel {
         return node;
     }
     
+    public List<Category> getCategories() {
+        return categories;
+    }
+    
     public static void main(String[] args) {
         List<Category> list = new ArrayList<Category>();
         for (int i = 0; i < 10; i++) {

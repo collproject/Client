@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JProgressBar;
 import javax.swing.JTree;
 import javax.swing.SwingWorker;
 
@@ -30,20 +31,19 @@ public class MenuConnectController implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        new SwingWorker<CategoriesTreeModel, Void>(){
-
+        JProgressBar progressBar = mainFrame.getProgressPanel().getProgressBar();
+        new ClientSwingWorker<CategoriesTreeModel, Void>(progressBar) {
             @Override
-            protected CategoriesTreeModel doInBackground() throws Exception {
-                Client c = new Client("http://localhost:7375/shop-app-server/admin");
-                List<Category> allCategories = c.getAllCategories();
+            protected CategoriesTreeModel doClientQuery() throws Exception {
+                List<Category> allCategories = getClient().getAllCategories();
                 return new CategoriesTreeModel(allCategories);
             }
 
             @Override
-            protected void done() {
+            protected void doneQuery() {
                 JTree tree = mainFrame.getCategoryPanel().getTree();
                 try {
-                     tree.setModel(get());                 
+                    tree.setModel(get());
                 } catch (InterruptedException ex) {
                     Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ExecutionException ex) {
@@ -51,5 +51,28 @@ public class MenuConnectController implements ActionListener {
                 }
             }
         }.execute();
+
+
+
+//        new SwingWorker<CategoriesTreeModel, Void>() {
+//            @Override
+//            protected CategoriesTreeModel doInBackground() throws Exception {
+//                Client c = new Client("http://localhost:7375/shop-app-server/admin");
+//                List<Category> allCategories = c.getAllCategories();
+//                return new CategoriesTreeModel(allCategories);
+//            }
+//
+//            @Override
+//            protected void done() {
+//                JTree tree = mainFrame.getCategoryPanel().getTree();
+//                try {
+//                    tree.setModel(get());
+//                } catch (InterruptedException ex) {
+//                    Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (ExecutionException ex) {
+//                    Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        }.execute();
     }
 }

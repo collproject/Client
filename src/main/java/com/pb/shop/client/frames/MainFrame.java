@@ -7,6 +7,7 @@ package com.pb.shop.client.frames;
 
 import com.pb.shop.client.action.AddProductController;
 import com.pb.shop.client.action.EditProductController;
+import com.pb.shop.client.action.MenuConfigController;
 import com.pb.shop.client.action.MenuConnectController;
 import com.pb.shop.client.action.SearchController;
 import com.pb.shop.client.action.TestListContrller;
@@ -47,6 +48,18 @@ public class MainFrame extends JFrame {
     private ProgressPanel progressPanel;
     private ResultPanel resultPanel;
     private SearchPanel searchPanel;
+
+    public DescriptionPanel getDescriptionPanel() {
+        return descriptionPanel;
+    }
+
+    public ProgressPanel getProgressPanel() {
+        return progressPanel;
+    }
+
+    public SearchPanel getSearchPanel() {
+        return searchPanel;
+    }
     
     private MainMenu mainMenu;
     
@@ -103,6 +116,7 @@ public class MainFrame extends JFrame {
         resultPanel.getAddButton().addActionListener(addProductController);
         resultPanel.getEditButton().addActionListener(editProductController);
         mainMenu.getItemConnect().addActionListener(menuConnectController);
+        mainMenu.getItemConfig().addActionListener(new MenuConfigController(this));
         mainMenu.getItemConnect().addActionListener(new TestListContrller(this));
         
         categoryPanel.setMinimumSize(new Dimension(100, 100));

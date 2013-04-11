@@ -28,11 +28,6 @@ public class CategoryPanel extends AbstractPanel{
     JPanel panelTree;
     JScrollPane scrollPane;
     
-    public CategoryPanel() {
-        initComponents();
-        configComponents();
-        addComponents();
-    }
 
     
     /**
