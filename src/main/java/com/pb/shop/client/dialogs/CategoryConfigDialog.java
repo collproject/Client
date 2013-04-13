@@ -4,10 +4,10 @@
  */
 package com.pb.shop.client.dialogs;
 
-import com.pb.shop.client.panels.CategoryPanel;
+import com.pb.shop.client.panels.CategoryConfigPanel;
+import com.pb.shop.client.panels.MakerConfigPanel;
 import java.awt.Component;
 import java.awt.Dimension;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -15,13 +15,13 @@ import javax.swing.SwingUtilities;
  *
  * @author Madness
  */
-public class ProductAddCategoryDialog extends DefaultDialog {
+public class CategoryConfigDialog extends DefaultDialog{
+    
+    private CategoryConfigPanel configPanel;
 
-    private CategoryPanel categoryPanel;
-
-    public ProductAddCategoryDialog(Component c) {
-        super(c, new CategoryPanel(), new Dimension(350, 400));
-        categoryPanel = (CategoryPanel) getContentPanel();
+    public CategoryConfigDialog(Component c) {
+        super(c, new CategoryConfigPanel(), new Dimension(300, 200));
+        configPanel = (CategoryConfigPanel) getContentPanel();
         setVisible(true);
     }
 
@@ -29,7 +29,7 @@ public class ProductAddCategoryDialog extends DefaultDialog {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new ProductAddCategoryDialog(null);
+                new CategoryConfigDialog(null);
             }
         });
     }

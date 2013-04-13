@@ -8,6 +8,7 @@ import com.pb.shop.client.dialogs.ProductConfDialog;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 /**
@@ -16,7 +17,7 @@ import javax.swing.SwingUtilities;
  */
 public class AddProductController implements ActionListener{
 
-   Component c;
+    Component c;
     public AddProductController() {
     }
 

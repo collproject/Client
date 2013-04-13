@@ -4,10 +4,9 @@
  */
 package com.pb.shop.client.dialogs;
 
-import com.pb.shop.client.panels.CategoryPanel;
+import com.pb.shop.client.panels.MakerConfigPanel;
 import java.awt.Component;
 import java.awt.Dimension;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -15,13 +14,13 @@ import javax.swing.SwingUtilities;
  *
  * @author Madness
  */
-public class ProductAddCategoryDialog extends DefaultDialog {
+public class MakerConfigDialog extends DefaultDialog {
 
-    private CategoryPanel categoryPanel;
+    private MakerConfigPanel configPanel;
 
-    public ProductAddCategoryDialog(Component c) {
-        super(c, new CategoryPanel(), new Dimension(350, 400));
-        categoryPanel = (CategoryPanel) getContentPanel();
+    public MakerConfigDialog(Component c) {
+        super(c, new MakerConfigPanel(), new Dimension(300, 150));
+        configPanel = (MakerConfigPanel) getContentPanel();
         setVisible(true);
     }
 
@@ -29,7 +28,7 @@ public class ProductAddCategoryDialog extends DefaultDialog {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new ProductAddCategoryDialog(null);
+                new MakerConfigDialog(null);
             }
         });
     }

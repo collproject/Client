@@ -19,8 +19,6 @@ import net.miginfocom.swing.MigLayout;
  */
 public class ConnectConfigPanel extends AbstractPanel {
 
-    private JButton buttonOk;
-    private JButton buttonCancel;
     private JLabel labelUrl;
     private JTextField fieldUrl;
     private JPanel panelOkCancel;
@@ -28,8 +26,6 @@ public class ConnectConfigPanel extends AbstractPanel {
 
     @Override
     protected void initComponents() {
-        buttonCancel = new JButton("Отмена");
-        buttonOk = new JButton("Ок");
         labelUrl = new JLabel("URL: ");
         fieldUrl = new JTextField(20);
         panelOkCancel = new JPanel();
@@ -45,8 +41,6 @@ public class ConnectConfigPanel extends AbstractPanel {
 
     @Override
     protected void addComponents() {
-        panelOkCancel.add(buttonCancel);
-        panelOkCancel.add(buttonOk);
 
         panelMain.add(labelUrl, "growx, push, wrap");
         panelMain.add(fieldUrl, "growx, push, wrap");
@@ -55,13 +49,6 @@ public class ConnectConfigPanel extends AbstractPanel {
         add(panelMain);
     }
 
-    public JButton getButtonOk() {
-        return buttonOk;
-    }
-
-    public JButton getButtonCancel() {
-        return buttonCancel;
-    }
 
     public JTextField getFieldUrl() {
         return fieldUrl;

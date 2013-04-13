@@ -7,6 +7,7 @@ package com.pb.shop.client.panels;
 import com.pb.shop.client.action.ProductAddCategoryController;
 import com.pb.shop.client.action.ProductAddMakerController;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,8 +26,6 @@ import net.miginfocom.swing.MigLayout;
  */
 public class ProductConfPanel extends AbstractPanel{
     
-    private JButton buttonOk;
-    private JButton buttonCancel;
     private JButton buttonCtegory;
     private JButton buttonMaker;
     
@@ -45,15 +44,12 @@ public class ProductConfPanel extends AbstractPanel{
     private JLabel labelName;
     
     private JPanel panelProp;
-    private JPanel panelOkCancel;
     private ModDescriptionPanel modDescriptionPanel;
    
     
     
     @Override
     protected void initComponents() {
-        buttonCancel = new JButton("Отмена");
-        buttonOk = new JButton("Ок");
         buttonCtegory = new JButton("Выбрать");
         buttonMaker = new JButton("Выбрать");
         
@@ -74,7 +70,6 @@ public class ProductConfPanel extends AbstractPanel{
         
         panelProp = new JPanel();
         modDescriptionPanel = new  ModDescriptionPanel();
-        panelOkCancel = new JPanel();
         
     }
 
@@ -82,7 +77,6 @@ public class ProductConfPanel extends AbstractPanel{
     protected void configComponents() {
         panelProp.setLayout(new MigLayout());
         panelProp.setBorder(BorderFactory.createTitledBorder("Характеристики товара"));
-        panelOkCancel.setLayout(new GridLayout(1, 2, 10, 0));
         setLayout(new BorderLayout());
     }
     
@@ -107,14 +101,12 @@ public class ProductConfPanel extends AbstractPanel{
         
         panelProp.add(checkExist, "gap unrelated, span 2");
         
-        panelOkCancel.add(buttonCancel);
-        panelOkCancel.add(buttonOk);
         
         
         JPanel panelDown = new JPanel(new MigLayout("","[]","[]10[]"));
         
         panelDown.add(panelProp, "growx, push, wrap");
-        panelDown.add(panelOkCancel,"align right");
+
         
         add(modDescriptionPanel, BorderLayout.CENTER);
         add(panelDown, BorderLayout.SOUTH);
@@ -147,8 +139,8 @@ public class ProductConfPanel extends AbstractPanel{
         protected void configComponents() {
             super.configComponents(); 
             panelButton.setLayout(new GridLayout(1, 2));
-            buttonCtegory.addActionListener(new ProductAddCategoryController(this));
-            buttonMaker.addActionListener(new ProductAddMakerController(this));
+            buttonCtegory.addActionListener(new ProductAddCategoryController((Component)this));
+            buttonMaker.addActionListener(new ProductAddMakerController((Component)this));
         }
 
         @Override

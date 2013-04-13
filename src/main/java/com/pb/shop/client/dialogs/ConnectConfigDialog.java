@@ -5,7 +5,6 @@
 package com.pb.shop.client.dialogs;
 
 import com.pb.shop.client.panels.ConnectConfigPanel;
-import com.pb.shop.client.panels.ProductConfPanel;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -17,26 +16,21 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JDialog;
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
 
 /**
  *
  * @author Madness
  */
-public class ConnectConfigDialog extends JDialog {
+public class ConnectConfigDialog extends DefaultDialog {
 
     private ConnectConfigPanel confPanel;
 
     public ConnectConfigDialog(Component c) {
-        initComponents();
+        super(c, new ConnectConfigPanel(), new Dimension(300, 150));
+        confPanel = (ConnectConfigPanel) getContentPanel();
         configComponents();
-        addComponents();
-        setModal(true);
-        setDefaultCloseOperation(HIDE_ON_CLOSE);
-        setSize(new Dimension(300, 130));
-        setLocationRelativeTo(c);
         setVisible(true);
     }
 
@@ -47,10 +41,6 @@ public class ConnectConfigDialog extends JDialog {
                 new ConnectConfigDialog(null);
             }
         });
-    }
-
-    private void initComponents() {
-        confPanel = new ConnectConfigPanel();
     }
 
     private void configComponents() {
@@ -66,7 +56,7 @@ public class ConnectConfigDialog extends JDialog {
             Logger.getLogger(ConnectConfigDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        confPanel.getButtonOk().addActionListener(new ActionListener() {
+        getButtonOk().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String newUrl = confPanel.getFieldUrl().getText();
@@ -78,14 +68,5 @@ public class ConnectConfigDialog extends JDialog {
                 }
             }
         });
-        confPanel.getButtonCancel().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ConnectConfigDialog.this.dispose();
-            }
-        });
-    }
-
-    private void addComponents() {
-        setContentPane(confPanel);
     }
 }

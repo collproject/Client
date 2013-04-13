@@ -5,6 +5,7 @@
 package com.pb.shop.client.action;
 
 import com.pb.shop.client.dialogs.ProductAddCategoryDialog;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComponent;
@@ -16,9 +17,9 @@ import javax.swing.SwingUtilities;
  */
 public class ProductAddCategoryController implements ActionListener{
 
-    private JComponent c;
+    private Component c;
 
-    public ProductAddCategoryController(JComponent c) {
+    public ProductAddCategoryController(Component c) {
         this.c = c;
     }
     

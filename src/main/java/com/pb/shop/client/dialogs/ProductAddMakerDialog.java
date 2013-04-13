@@ -5,6 +5,8 @@
 package com.pb.shop.client.dialogs;
 
 import com.pb.shop.client.panels.MakerPanel;
+import java.awt.Component;
+import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
@@ -12,11 +14,12 @@ import javax.swing.JPanel;
  *
  * @author Madness
  */
-public class ProductAddMakerDialog extends ProductAddDialog{
+public class ProductAddMakerDialog extends DefaultDialog{
 
     private MakerPanel makerPanel;
-    public ProductAddMakerDialog(JComponent c) {
-        super(c, new MakerPanel());
+    public ProductAddMakerDialog(Component c) {
+        super(c, new MakerPanel(), new Dimension(350,400));
         makerPanel = (MakerPanel) getContentPanel();
+        setVisible(true);
     }
 }
