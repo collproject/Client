@@ -6,6 +6,7 @@ package com.pb.shop.client.panels;
 
 import com.pb.shop.model.Category;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -30,6 +31,14 @@ public class CategoryConfigPanel extends AbstractPanel {
     private JComboBox<Category> listParents;
     private JCheckBox checkBoxRootCategory;
 
+    public CategoryConfigPanel() {
+    }
+
+    public CategoryConfigPanel(Component c) {
+        setParentComponent(c);
+    }
+    
+
     @Override
     protected void initComponents() {
         labelId = new JLabel("ИН:");
@@ -44,7 +53,7 @@ public class CategoryConfigPanel extends AbstractPanel {
 
     @Override
     protected void configComponents() {
-        setLayout(new MigLayout("", "[]5[]", "[][][][]"));
+        setLayout(new MigLayout("", "[]15[]", "[][][][]"));
         listParents.setModel(new DefaultComboBoxModel<Category>(
                 new Category[] {new Category(23,"SDfsfsf"),
                            new Category(22,"ывапкуп")}

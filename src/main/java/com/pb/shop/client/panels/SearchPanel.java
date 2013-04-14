@@ -6,6 +6,7 @@ package com.pb.shop.client.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -29,6 +30,15 @@ public class SearchPanel extends AbstractPanel{
     private JLabel priceToLabel;
     private JTextField priceToField;
     private JButton searchButton;
+
+    public SearchPanel() {
+    }
+
+    public SearchPanel(Component c) {
+        setParentComponent(c);
+    }
+    
+    
     
     @Override
     protected void initComponents() {

@@ -24,7 +24,7 @@ import net.miginfocom.swing.MigLayout;
  */
 public class DefaultDialog extends JDialog {
 
-    private Component c;
+    protected Component mainFrame;
     private JPanel contentPanel;
     private JButton buttonOk;
     private JButton buttonCancel;
@@ -32,7 +32,7 @@ public class DefaultDialog extends JDialog {
     private JPanel panel;
 
     public DefaultDialog(Component c, JPanel contentPanel, Dimension size) {
-        this.c = c;
+        this.mainFrame = c;
         this.contentPanel = contentPanel;
         initComponents();
         configComponents();

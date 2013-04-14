@@ -5,6 +5,7 @@
 package com.pb.shop.client.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
@@ -26,6 +27,15 @@ public class ResultPanel extends AbstractPanel {
     private JTable resultTable;
     private JPanel buttonsPanel;
     private JScrollPane tablePanel;
+
+    public ResultPanel() {
+    }
+
+    public ResultPanel(Component c) {
+        setParentComponent(c);
+    }
+    
+    
 
     @Override
     protected void initComponents() {

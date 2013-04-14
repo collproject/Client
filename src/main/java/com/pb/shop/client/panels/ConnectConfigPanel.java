@@ -5,6 +5,7 @@
 package com.pb.shop.client.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,6 +24,14 @@ public class ConnectConfigPanel extends AbstractPanel {
     private JTextField fieldUrl;
     private JPanel panelOkCancel;
     private JPanel panelMain;
+
+    public ConnectConfigPanel() {
+    }
+
+    public ConnectConfigPanel(Component c) {
+        setParentComponent(c);
+    }
+    
 
     @Override
     protected void initComponents() {

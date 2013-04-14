@@ -20,6 +20,7 @@ public class ProductConfDialog extends DefaultDialog{
     public ProductConfDialog(Component c) {
         super(c, new ProductConfPanel(), new Dimension(700,400));
         confPanel = (ProductConfPanel) getContentPanel();
+        confPanel.setParentComponent(c);
         setVisible(true);
     }
     

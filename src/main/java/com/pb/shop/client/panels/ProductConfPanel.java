@@ -45,6 +45,13 @@ public class ProductConfPanel extends AbstractPanel{
     
     private JPanel panelProp;
     private ModDescriptionPanel modDescriptionPanel;
+
+    public ProductConfPanel() {
+    }
+
+    public ProductConfPanel(Component c) {
+        setParentComponent(c);
+    }
    
     
     
@@ -139,8 +146,8 @@ public class ProductConfPanel extends AbstractPanel{
         protected void configComponents() {
             super.configComponents(); 
             panelButton.setLayout(new GridLayout(1, 2));
-            buttonCtegory.addActionListener(new ProductAddCategoryController((Component)this));
-            buttonMaker.addActionListener(new ProductAddMakerController((Component)this));
+            buttonCtegory.addActionListener(new ProductAddCategoryController(getParentComponent()));
+            buttonMaker.addActionListener(new ProductAddMakerController(getParentComponent()));
         }
 
         @Override

@@ -82,9 +82,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setVisible(true);
-        
-        makerPanel.getButtonAdd().addActionListener(new TestListContrller(this));
+        setVisible(true);        
     }
 
     private void initComponents() {
@@ -93,7 +91,7 @@ public class MainFrame extends JFrame {
         
         categoryPanel = new CategoryPanel();
         descriptionPanel = new DescriptionPanel();
-        makerPanel = new MakerPanel();
+        makerPanel = new MakerPanel(this);
         progressPanel = new ProgressPanel();
         resultPanel = new ResultPanel();
         searchPanel = new SearchPanel();

@@ -5,6 +5,7 @@
 package com.pb.shop.client.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -31,6 +32,14 @@ public class DescriptionPanel extends AbstractPanel {
     private JSplitPane jsp;
     private ImageIcon imageIcon;
     JPanel panelLeft;
+
+    public DescriptionPanel() {
+    }
+
+    public DescriptionPanel(Component c) {
+        setParentComponent(c);
+    }
+    
 
     @Override
     protected void initComponents() {

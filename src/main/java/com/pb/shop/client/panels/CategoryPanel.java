@@ -5,6 +5,7 @@
 package com.pb.shop.client.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
@@ -27,6 +28,13 @@ public class CategoryPanel extends AbstractPanel{
     JPanel panelButtons;
     JPanel panelTree;
     JScrollPane scrollPane;
+
+    public CategoryPanel() {
+    }
+
+    public CategoryPanel(Component c) {
+        setParentComponent(c);
+    }
     
 
     
