@@ -7,6 +7,7 @@ package com.pb.shop.client.panels;
 import com.pb.shop.client.action.ClientSwingWorker;
 import com.pb.shop.client.dialogs.MakerConfigDialog;
 import com.pb.shop.client.frames.MainFrame;
+import com.pb.shop.data.models.MakersJListModel;
 import com.pb.shop.exception.GeneralException;
 import com.pb.shop.exception.ServiceException;
 import com.pb.shop.model.Maker;
@@ -19,6 +20,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,8 +42,8 @@ import javax.swing.border.Border;
  *
  * @author Madness
  */
-public class MakerPanel extends AbstractPanel{
-    
+public class MakerPanel extends AbstractPanel {
+
     private JPanel panelList;
     private JPanel panelButtons;
     private JButton buttonDel;
@@ -56,7 +58,6 @@ public class MakerPanel extends AbstractPanel{
     public MakerPanel(Component parent) {
         setParentComponent(parent);
     }
-    
 
     @Override
     protected void initComponents() {
@@ -72,7 +73,7 @@ public class MakerPanel extends AbstractPanel{
     @Override
     protected void configComponents() {
         setLayout(new BorderLayout());
-        panelButtons.setLayout( new GridLayout(1, 3, 5, 5));
+        panelButtons.setLayout(new GridLayout(1, 3, 5, 5));
         setBorder(BorderFactory.createTitledBorder("Производители"));
         panelList.setLayout(new BorderLayout());
         scrollPane = new JScrollPane(makerList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -92,6 +93,7 @@ public class MakerPanel extends AbstractPanel{
         add(panelList, BorderLayout.CENTER);
         add(panelButtons, BorderLayout.SOUTH);
     }
+
     public static void main(String[] args) {
         JFrame test = new JFrame();
         test.setLayout(new BorderLayout());
@@ -117,12 +119,14 @@ public class MakerPanel extends AbstractPanel{
 
     private ActionListener addNewMaker() {
         return new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
-
                     public void run() {
-                         new MakerConfigDialog(getParentComponent());
+                        Maker maker = new MakerConfigDialog(getParentComponent()).getMaker();
+                        if (maker != null) {
+                            ((MakersJListModel) makerList.getModel()).getList().add(maker);
+                            ((MakersJListModel) makerList.getModel()).update();
+                        }
                     }
                 });
             }
@@ -131,34 +135,38 @@ public class MakerPanel extends AbstractPanel{
 
     private ActionListener delMaker() {
         return new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
-                new ClientSwingWorker<UserGoodMessage, Void>(getParentComponent()){
-
+                new ClientSwingWorker<UserGoodMessage, Void>(getParentComponent()) {
                     @Override
                     protected UserGoodMessage doClientQuery() throws Exception {
                         Object response;
-                        
+
                         Maker selectedMaker = makerList.getSelectedValue();
-                        if(selectedMaker == null)
+                        if (selectedMaker == null) {
                             throw new GeneralException("Производитель не выбран!");
-                        
+                        }
+
                         response = getClient().deleteMakerById(selectedMaker.getMakID().toString());
-                        
-                        if(response instanceof UserGoodMessage)
+
+                        if (response instanceof UserGoodMessage) {
+                            //Обновление отображения элементов в списке
+                            MakersJListModel model = (MakersJListModel) makerList.getModel();
+                            List<Maker> list = model.getList();
+                            list.remove(selectedMaker);
+                            model.update();
                             return (UserGoodMessage) response;
-                        else
+                        } else {
                             throw new ServiceException((UserBadMessage) response);
+                        }
                     }
 
                     @Override
                     protected void doneQuery() {
-                            UserGoodMessage message = getResponse();
-                            JOptionPane.showMessageDialog(getParentComponent(),
-                                    message.getMessage(), "Подтверждение",
-                                    JOptionPane.INFORMATION_MESSAGE);
+                        UserGoodMessage message = getResponse();
+                        JOptionPane.showMessageDialog(getParentComponent(),
+                                message.getMessage(), "Подтверждение",
+                                JOptionPane.INFORMATION_MESSAGE);
                     }
-                    
                 }.execute();
             }
         };
@@ -166,17 +174,22 @@ public class MakerPanel extends AbstractPanel{
 
     private ActionListener editMaker() {
         return new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
-
                     public void run() {
-                         new MakerConfigDialog(getParentComponent(),
-                                 makerList.getSelectedValue());
+                        Maker maker = new MakerConfigDialog(getParentComponent(),
+                                makerList.getSelectedValue()).getMaker();
+                        
+                        //Если изменения прошли успешно, заменяем элемент в списке на новый
+                        if (maker != null) {
+                            List<Maker> list = ((MakersJListModel) makerList.getModel()).getList();
+                            list.set(makerList.getSelectedIndex(), maker);
+                            ((MakersJListModel) makerList.getModel()).update();
+                        }
+
                     }
                 });
             }
         };
     }
-    
 }

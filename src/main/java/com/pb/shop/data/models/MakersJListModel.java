@@ -13,7 +13,7 @@ import javax.swing.AbstractListModel;
  *
  * @author Дмитрий
  */
-public class MakersJListModel extends AbstractListModel<String> {
+public class MakersJListModel extends AbstractListModel<Maker> {
 
     private List<Maker> list;
 
@@ -25,8 +25,21 @@ public class MakersJListModel extends AbstractListModel<String> {
         return list.size();
     }
 
-    public String getElementAt(int index) {
-       return list.get(index).getMakName();
+    public Maker getElementAt(int index) {
+       return list.get(index);
+    }
+
+    public List<Maker> getList() {
+        return list;
+    }
+    
+    public void update(){
+       fireContentsChanged(this, 0, list.size()-1); 
+    }
+    
+    public void setList(List<Maker> list) {
+        this.list = list;
+        update();
     }
 
 }

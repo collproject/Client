@@ -112,7 +112,7 @@ public class MainFrame extends JFrame {
     private void configComponents() {
         searchPanel.getSearchButton().addActionListener(searchController);
         resultPanel.getAddButton().addActionListener(addProductController);
-        resultPanel.getEditButton().addActionListener(editProductController);
+        resultPanel.getEditButton().addActionListener(new EditProductController(this));
         mainMenu.getItemConnect().addActionListener(menuConnectController);
         mainMenu.getItemConfig().addActionListener(new MenuConfigController(this));
         mainMenu.getItemConnect().addActionListener(new TestListContrller(this));

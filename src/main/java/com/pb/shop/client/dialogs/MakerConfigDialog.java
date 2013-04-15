@@ -33,6 +33,7 @@ public class MakerConfigDialog extends DefaultDialog {
     private MakerConfigPanel configPanel;
     private Maker maker;
     private boolean updateMaker = false;
+    private boolean statusOk = false;
 
     public MakerConfigDialog(Component c) {
         super(c, new MakerConfigPanel(), new Dimension(300, 220));
@@ -50,7 +51,10 @@ public class MakerConfigDialog extends DefaultDialog {
     }
 
     public Maker getMaker() {
-        return maker;
+        if(statusOk)
+            return maker;
+        else
+            return null;
     }
 
     public static void main(String[] args) {
@@ -73,16 +77,22 @@ public class MakerConfigDialog extends DefaultDialog {
             if (maker.getMakDescr() != null) {
                 configPanel.getTextAreaDescr().setText(maker.getMakDescr());
             }           
-        } else {
-            maker = new Maker();
         }
         getButtonOk().addActionListener(sendNewData());
+    }
+    
+    private void fillMaker() {
+        maker = new Maker(); 
+        maker.setMakID(Integer.parseInt(configPanel.getFieldId().getText()));
+        maker.setMakName(configPanel.getFieldName().getText());
+        maker.setMakDescr(configPanel.getTextAreaDescr().getText());
     }
 
     private ActionListener sendNewData() {
         return new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+                fillMaker();
                 new ClientSwingWorker<UserGoodMessage, Void>(mainFrame){
 
                     @Override
@@ -92,16 +102,20 @@ public class MakerConfigDialog extends DefaultDialog {
                             response = getClient().updateMaker(maker);
                         }else{
                             response = getClient().addMaker(maker);
+                            
                         }
                         if(response instanceof UserGoodMessage)
                             return (UserGoodMessage) response;
-                        else
+                        else{
                             throw new ServiceException((UserBadMessage) response);
+                        }
+                            
                     }
 
                     @Override
                     protected void doneQuery() {
                             UserGoodMessage message = getResponse();
+                            statusOk = true;
                             MakerConfigDialog.this.dispose();
                             JOptionPane.showMessageDialog(mainFrame, message.getMessage(), "Подтверждение",
                                     JOptionPane.INFORMATION_MESSAGE);
