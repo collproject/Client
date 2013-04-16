@@ -7,6 +7,9 @@ package com.pb.shop.client.panels;
 import com.pb.shop.model.Category;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -28,16 +31,22 @@ public class CategoryConfigPanel extends AbstractPanel {
     private JLabel labelRoot;
     private JTextField fieldId;
     private JTextField fieldName;
-    private JComboBox<Category> listParents;
+    private JComboBox<Category> comboBoxCategories;
     private JCheckBox checkBoxRootCategory;
+    private List<Category> categories;
 
     public CategoryConfigPanel() {
     }
 
-    public CategoryConfigPanel(Component c) {
+    public CategoryConfigPanel(Component c, List<Category> categories) {
         setParentComponent(c);
+        this.categories = categories;
+        if (categories == null) {
+            checkBoxRootCategory.setSelected(true);
+            checkBoxRootCategory.setEnabled(false);
+            comboBoxCategories.setEnabled(false);
+        }
     }
-    
 
     @Override
     protected void initComponents() {
@@ -46,7 +55,7 @@ public class CategoryConfigPanel extends AbstractPanel {
         labelParentName = new JLabel("Родитель:");
         labelRoot = new JLabel("Корневая:");
         checkBoxRootCategory = new JCheckBox();
-        listParents = new JComboBox<Category>();
+        comboBoxCategories = new JComboBox<Category>();
         fieldId = new JTextField(10);
         fieldName = new JTextField(10);
     }
@@ -54,10 +63,8 @@ public class CategoryConfigPanel extends AbstractPanel {
     @Override
     protected void configComponents() {
         setLayout(new MigLayout("", "[]15[]", "[][][][]"));
-        listParents.setModel(new DefaultComboBoxModel<Category>(
-                new Category[] {new Category(23,"SDfsfsf"),
-                           new Category(22,"ывапкуп")}
-                ));
+        comboBoxCategories.setModel(new DefaultComboBoxModel<Category>());
+        checkBoxRootCategory.addActionListener(changeStatusRootCategory());
     }
 
     @Override
@@ -67,9 +74,9 @@ public class CategoryConfigPanel extends AbstractPanel {
         add(labelName);
         add(fieldName, "growx, push, wrap");
         add(labelParentName);
-        add(listParents, "growx, push, wrap");
+        add(comboBoxCategories, "growx, push, wrap");
         add(labelRoot);
-        add(checkBoxRootCategory,"growx, push, span");
+        add(checkBoxRootCategory, "growx, push, span");
     }
 
     public JTextField getFieldId() {
@@ -80,10 +87,43 @@ public class CategoryConfigPanel extends AbstractPanel {
         return fieldName;
     }
 
+    public JComboBox<Category> getComboBoxCategories() {
+        return comboBoxCategories;
+    }
+
+    public JCheckBox getCheckBoxRootCategory() {
+        return checkBoxRootCategory;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public Category getParentCategory() {
+        if (checkBoxRootCategory.isSelected()) {
+            return null;
+        } else {
+            return (Category) comboBoxCategories.getSelectedItem();
+        }
+    }
+
     public static void main(String[] args) {
         JFrame test = new JFrame();
         test.setLayout(new BorderLayout());
         test.add(new CategoryConfigPanel());
         test.setVisible(true);
+    }
+
+    private ActionListener changeStatusRootCategory() {
+        return new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (((JCheckBox) e.getSource()).isSelected()) {
+                    comboBoxCategories.setEnabled(false);
+                } else {
+                    comboBoxCategories.setEnabled(true);
+                }
+
+            }
+        };
     }
 }

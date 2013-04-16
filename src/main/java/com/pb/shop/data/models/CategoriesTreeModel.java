@@ -95,6 +95,14 @@ public class CategoriesTreeModel extends DefaultTreeModel {
     public List<Category> getCategories() {
         return categories;
     }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+        initMapParentCategories();
+        initMapCategoriesById();
+        initNodes();
+        setRoot(rootNode);
+    }
     
     public static void main(String[] args) {
         List<Category> list = new ArrayList<Category>();
@@ -121,7 +129,18 @@ public class CategoriesTreeModel extends DefaultTreeModel {
          list.add(c2);
         
         CategoryPanel panel = new CategoryPanel();
-        panel.getTree().setModel(new CategoriesTreeModel(list));
+        panel.setTreeModel(new CategoriesTreeModel(list));
+        
+        Category c3 = new Category();
+            c3.setCatID(334);
+            c3.setCatName("Catdddd"+31);
+            c3.setParentCatID(2);
+        list.add(c3);
+        
+        
+        ((CategoriesTreeModel)panel.getTree().getModel()).setCategories(list);
+        panel.setTreeModel((CategoriesTreeModel)panel.getTree().getModel());
+        
         JFrame test = new JFrame();
         test.setLayout(new BorderLayout());
         test.add(panel);
