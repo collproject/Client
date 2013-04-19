@@ -16,6 +16,10 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -31,9 +35,10 @@ public class CategoryConfigDialog extends DefaultDialog {
     private boolean updateCategory = false;
     private boolean statusOk = false;
     private List<Category> categories;
+    private Map<Integer, Category> mapCategoriesById;
 
     public CategoryConfigDialog(Component c, List<Category> categories) {
-        super(c, new CategoryConfigPanel(c, categories), new Dimension(300, 200));
+        super(c, new CategoryConfigPanel(c), new Dimension(300, 200));
         configPanel = (CategoryConfigPanel) getContentPanel();
         this.categories = categories;
         configComponents();
@@ -41,7 +46,7 @@ public class CategoryConfigDialog extends DefaultDialog {
     }
 
     public CategoryConfigDialog(Component c, List<Category> categories, Category category) {
-        super(c, new CategoryConfigPanel(c, categories), new Dimension(300, 200));
+        super(c, new CategoryConfigPanel(c), new Dimension(300, 200));
         configPanel = (CategoryConfigPanel) getContentPanel();
         this.categories = categories;
         this.category = category;
@@ -58,13 +63,39 @@ public class CategoryConfigDialog extends DefaultDialog {
         });
     }
 
+    public Category getCategory() {
+        if (statusOk) {
+            return category;
+        } else {
+            return null;
+        }
+    }
+
     private void configComponents() {
+        if (categories == null) {
+            configPanel.getCheckBoxRootCategory().setSelected(true);
+            configPanel.getCheckBoxRootCategory().setEnabled(false);
+            configPanel.getComboBoxCategories().setEnabled(false);
+        } else {
+            Vector<Category> vector = new Vector<Category>(categories);
+            configPanel.getComboBoxCategories().setModel(
+                    new DefaultComboBoxModel<Category>(vector));
+            //configPanel.getComboBoxCategories().setSelectedIndex();
+        }
         if (category != null) {
+            
+            mapCategoriesById = new TreeMap<Integer, Category>();
+            for (Category c : categories) {
+                mapCategoriesById.put(c.getCatID(), c);
+            }
+            
             updateCategory = true;
             configPanel.getFieldId().setText(category.getCatID().toString());
             configPanel.getFieldId().setEditable(false);
             configPanel.getFieldName().setText(category.getCatName());
-            configPanel.getComboBoxCategories().setSelectedItem(category);
+            
+            configPanel.getComboBoxCategories().setSelectedItem(
+                    mapCategoriesById.get(category.getParentCatID()));
         }
         getButtonOk().addActionListener(sendNewData());
     }

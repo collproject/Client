@@ -4,7 +4,14 @@
  */
 package com.pb.shop.client.panels;
 
+import com.pb.shop.client.action.ClientSwingWorker;
+import com.pb.shop.client.dialogs.CategoryConfigDialog;
 import com.pb.shop.data.models.CategoriesTreeModel;
+import com.pb.shop.exception.GeneralException;
+import com.pb.shop.exception.ServiceException;
+import com.pb.shop.model.Category;
+import com.pb.shop.model.UserBadMessage;
+import com.pb.shop.model.UserGoodMessage;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -12,15 +19,19 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeModelEvent;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -58,7 +69,7 @@ public class CategoryPanel extends AbstractPanel {
 
     @Override
     protected void initComponents() {
-        tree = new JTree();
+        tree = new JTree(new CategoriesTreeModel(null));
         buttonAdd = new JButton("Добавить");
         buttonDel = new JButton("Удалить");
         buttonEdit = new JButton("Редактировать");
@@ -87,7 +98,7 @@ public class CategoryPanel extends AbstractPanel {
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         setMinimumSize(new Dimension(50, 50));
         tree.setRootVisible(false);
-        
+
         buttonAdd.addActionListener(addNewCategory());
         buttonDel.addActionListener(delCategory());
         buttonEdit.addActionListener(editCategory());
@@ -113,15 +124,30 @@ public class CategoryPanel extends AbstractPanel {
         tree.expandPath(parent);
         // tree.collapsePath(parent); для закрытия узла
     }
-    
+
+    public Category getSelectedCategory() {
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+        if (node == null) {
+            return null;
+        }
+        Object nodeInfo = node.getUserObject();
+//        if (node.isLeaf()) {
+//            return (Category) nodeInfo;
+//        } else {
+//            return null;
+//        }
+        return (Category) nodeInfo;
+    }
+
     public JTree getTree() {
         return tree;
     }
-    
-    public void setTreeModel(CategoriesTreeModel model){
+
+    public void setTreeModel(CategoriesTreeModel model) {
         tree.setModel(model);
         expandAll(tree);
     }
+
     public JButton getButtonDel() {
         return buttonDel;
     }
@@ -139,11 +165,20 @@ public class CategoryPanel extends AbstractPanel {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-//                        Category category = new CategoryConfigDialog(getParentComponent()).getMaker();
-//                        if (category != null) {
-//                            ((MakersJListModel) makerList.getModel()).getList().add(maker);
-//                            ((MakersJListModel) makerList.getModel()).update();
-//                        }
+                        List<Category> categories = ((CategoriesTreeModel) tree.getModel()).getCategories();
+                        Category category = new CategoryConfigDialog(getParentComponent(),
+                                categories).getCategory();
+                        if (category != null) {
+                            CategoriesTreeModel model = (CategoriesTreeModel) tree.getModel();
+                            
+                            if (categories == null) {
+                                categories = new ArrayList<Category>();
+                            }
+                            
+                            categories.add(category);
+                            model.setCategories(categories);
+                            CategoryPanel.this.setTreeModel(model);
+                        }
                     }
                 });
             }
@@ -152,18 +187,68 @@ public class CategoryPanel extends AbstractPanel {
 
     private ActionListener delCategory() {
         return new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet.");
+                new ClientSwingWorker<UserGoodMessage, Void>(getParentComponent()) {
+                    @Override
+                    protected UserGoodMessage doClientQuery() throws Exception {
+                        Object response;
+
+                        Category selectedCategory = getSelectedCategory();
+                        if (selectedCategory == null) {
+                            throw new GeneralException("Категория не выбрана!");
+                        }
+
+                        response = getClient().deleteCategoryById(selectedCategory.getCatID().toString());
+
+                        if (response instanceof UserGoodMessage) {
+                            //Обновление отображения элементов в дереве
+                            CategoriesTreeModel model = (CategoriesTreeModel) tree.getModel();
+                            List<Category> list = model.getCategories();
+                            list.remove(selectedCategory);
+                            model.setCategories(list);
+                            setTreeModel(model);
+                            return (UserGoodMessage) response;
+                        } else {
+                            throw new ServiceException((UserBadMessage) response);
+                        }
+                    }
+
+                    @Override
+                    protected void doneQuery() {
+                        UserGoodMessage message = getResponse();
+                        JOptionPane.showMessageDialog(getParentComponent(),
+                                message.getMessage(), "Подтверждение",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }.execute();
             }
         };
     }
 
     private ActionListener editCategory() {
         return new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet.");
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        List<Category> parentCategories = ((CategoriesTreeModel) tree.getModel())
+                                .getParentCategories(getSelectedCategory());
+                        Category category = new CategoryConfigDialog(getParentComponent(),
+                                parentCategories, getSelectedCategory()).getCategory();
+                        
+                        if (category != null) {    
+                            CategoriesTreeModel model = (CategoriesTreeModel) tree.getModel();
+                            
+                            List<Category> categories = ((CategoriesTreeModel) tree.getModel())
+                                .getCategories();
+                            
+                            categories.remove(getSelectedCategory());
+                            categories.add(category);
+                            
+                            model.setCategories(categories);
+                            CategoryPanel.this.setTreeModel(model);
+                        }
+                    }
+                });
             }
         };
     }

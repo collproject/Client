@@ -33,19 +33,12 @@ public class CategoryConfigPanel extends AbstractPanel {
     private JTextField fieldName;
     private JComboBox<Category> comboBoxCategories;
     private JCheckBox checkBoxRootCategory;
-    private List<Category> categories;
 
     public CategoryConfigPanel() {
     }
 
-    public CategoryConfigPanel(Component c, List<Category> categories) {
+    public CategoryConfigPanel(Component c) {
         setParentComponent(c);
-        this.categories = categories;
-        if (categories == null) {
-            checkBoxRootCategory.setSelected(true);
-            checkBoxRootCategory.setEnabled(false);
-            comboBoxCategories.setEnabled(false);
-        }
     }
 
     @Override
@@ -63,7 +56,7 @@ public class CategoryConfigPanel extends AbstractPanel {
     @Override
     protected void configComponents() {
         setLayout(new MigLayout("", "[]15[]", "[][][][]"));
-        comboBoxCategories.setModel(new DefaultComboBoxModel<Category>());
+            comboBoxCategories.setModel(new DefaultComboBoxModel<Category>());
         checkBoxRootCategory.addActionListener(changeStatusRootCategory());
     }
 
@@ -95,9 +88,6 @@ public class CategoryConfigPanel extends AbstractPanel {
         return checkBoxRootCategory;
     }
 
-    public List<Category> getCategories() {
-        return categories;
-    }
 
     public Category getParentCategory() {
         if (checkBoxRootCategory.isSelected()) {

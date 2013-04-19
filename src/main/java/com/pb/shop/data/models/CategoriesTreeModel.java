@@ -34,6 +34,9 @@ public class CategoriesTreeModel extends DefaultTreeModel {
 
     public CategoriesTreeModel(List<Category> categories) {
         super(null);
+        if (categories == null) {
+            return;
+        }
         this.categories = categories;
         initMapParentCategories();
         initMapCategoriesById();
@@ -43,13 +46,13 @@ public class CategoriesTreeModel extends DefaultTreeModel {
 
     private void initNodes() {
         rootNode = new DefaultMutableTreeNode("Все");
-        for(Category c : categories){
-            if(c.getCatID() == c.getParentCatID()){
+        for (Category c : categories) {
+            if (c.getCatID() == c.getParentCatID()) {
                 rootNode.add(addNodes(c));
             }
         }
     }
-    
+
     private void initMapCategoriesById() {
         mapCategoriesById = new TreeMap<Integer, Category>();
         for (Category c : categories) {
@@ -81,19 +84,26 @@ public class CategoriesTreeModel extends DefaultTreeModel {
     private DefaultMutableTreeNode addNodes(Category c) {
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(c);
         Set<Integer> childrens = getKeysByValue(mapParentCategories, c.getCatID());
-        
-        
-            for(Integer id: childrens){
-                if(id != c.getCatID())
-                    node.add(addNodes(mapCategoriesById.get(id)));
+
+
+        for (Integer id : childrens) {
+            if (id != c.getCatID()) {
+                node.add(addNodes(mapCategoriesById.get(id)));
             }
-        
-        
+        }
+
+
         return node;
     }
-    
+
     public List<Category> getCategories() {
         return categories;
+    }
+
+    public List<Category> getParentCategories(Category child) {
+        List<Category> parents = new ArrayList<Category>(categories);
+        deleteChildren(child, parents);
+        return parents;
     }
 
     public void setCategories(List<Category> categories) {
@@ -103,47 +113,57 @@ public class CategoriesTreeModel extends DefaultTreeModel {
         initNodes();
         setRoot(rootNode);
     }
-    
+
     public static void main(String[] args) {
         List<Category> list = new ArrayList<Category>();
         for (int i = 0; i < 10; i++) {
             Category c = new Category();
             c.setCatID(i);
-            c.setCatName("Cat"+i);
+            c.setCatName("Cat" + i);
             c.setParentCatID(i);
             list.add(c);
         }
-        
+
         Category c = new Category();
-            c.setCatID(30);
-            c.setCatName("Cat"+30);
-            c.setParentCatID(3);
-            
-         list.add(c);
-         
-       Category c2 = new Category();
-            c2.setCatID(31);
-            c2.setCatName("Cat"+31);
-            c2.setParentCatID(30);
-            
-         list.add(c2);
-        
+        c.setCatID(30);
+        c.setCatName("Cat" + 30);
+        c.setParentCatID(3);
+
+        list.add(c);
+
+        Category c2 = new Category();
+        c2.setCatID(31);
+        c2.setCatName("Cat" + 31);
+        c2.setParentCatID(30);
+
+        list.add(c2);
+
         CategoryPanel panel = new CategoryPanel();
         panel.setTreeModel(new CategoriesTreeModel(list));
-        
+
         Category c3 = new Category();
-            c3.setCatID(334);
-            c3.setCatName("Catdddd"+31);
-            c3.setParentCatID(2);
+        c3.setCatID(334);
+        c3.setCatName("Catdddd" + 31);
+        c3.setParentCatID(2);
         list.add(c3);
-        
-        
-        ((CategoriesTreeModel)panel.getTree().getModel()).setCategories(list);
-        panel.setTreeModel((CategoriesTreeModel)panel.getTree().getModel());
-        
+
+
+        ((CategoriesTreeModel) panel.getTree().getModel()).setCategories(list);
+        panel.setTreeModel((CategoriesTreeModel) panel.getTree().getModel());
+
         JFrame test = new JFrame();
         test.setLayout(new BorderLayout());
         test.add(panel);
         test.setVisible(true);
+    }
+
+    private void deleteChildren(Category c, List<Category> parents) {
+        Set<Integer> childrens = getKeysByValue(mapParentCategories, c.getCatID());
+        for (Integer id : childrens) {
+            if(id != c.getCatID()){
+                deleteChildren(mapCategoriesById.get(id), parents);
+            }
+        }
+        parents.remove(c);
     }
 }

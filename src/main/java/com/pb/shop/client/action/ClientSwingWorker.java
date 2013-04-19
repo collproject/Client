@@ -32,7 +32,7 @@ public abstract class ClientSwingWorker<T, V> extends SwingWorker<T, V> {
 
     public ClientSwingWorker(Component mainFrame) {
         this.mainFrame = mainFrame;
-        if(mainFrame instanceof MainFrame){
+        if (mainFrame instanceof MainFrame) {
             this.progressBar = ((MainFrame) mainFrame).getProgressPanel().getProgressBar();
         }
     }
@@ -64,16 +64,17 @@ public abstract class ClientSwingWorker<T, V> extends SwingWorker<T, V> {
         } catch (InterruptedException ex) {
             Logger.getLogger(MakerConfigDialog.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(mainFrame, ex.getMessage(), "Ошибка приложения!",
-                        JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.ERROR_MESSAGE);
         } catch (ExecutionException ex) {
             Logger.getLogger(MakerConfigDialog.class.getName()).log(Level.SEVERE, null, ex);
             if (ex.getCause() instanceof GeneralException) {
-                JOptionPane.showMessageDialog(mainFrame, ex.getCause().getMessage(), "Ошибка приложения!",
+                JOptionPane.showMessageDialog(mainFrame, ex.getMessage(), "Ошибка приложения!",
                         JOptionPane.ERROR_MESSAGE);
             } else if (ex.getCause() instanceof ServiceException) {
-                JOptionPane.showMessageDialog(mainFrame, ex.getCause().getMessage(), "Ошибка сервера!",
+                JOptionPane.showMessageDialog(mainFrame, ex.getMessage(), "Ошибка сервера!",
                         JOptionPane.ERROR_MESSAGE);
             }
+        } finally {
         }
     }
 

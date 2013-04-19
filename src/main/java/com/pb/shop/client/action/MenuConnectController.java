@@ -31,8 +31,7 @@ public class MenuConnectController implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        JProgressBar progressBar = mainFrame.getProgressPanel().getProgressBar();
-        new ClientSwingWorker<CategoriesTreeModel, Void>(progressBar) {
+        new ClientSwingWorker<CategoriesTreeModel, Void>(mainFrame) {
             @Override
             protected CategoriesTreeModel doClientQuery() throws Exception {
                 List<Category> allCategories = getClient().getAllCategories();
@@ -41,14 +40,8 @@ public class MenuConnectController implements ActionListener {
 
             @Override
             protected void doneQuery() {
-                JTree tree = mainFrame.getCategoryPanel().getTree();
-                try {
-                    tree.setModel(get());
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ExecutionException ex) {
-                    Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                mainFrame.getCategoryPanel().setTreeModel(getResponse());
+
             }
         }.execute();
     }

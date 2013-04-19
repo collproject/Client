@@ -89,7 +89,7 @@ public class MainFrame extends JFrame {
         panelLeft = new JPanel(new BorderLayout());
         panelRight = new JPanel(new BorderLayout());
         
-        categoryPanel = new CategoryPanel();
+        categoryPanel = new CategoryPanel(this);
         descriptionPanel = new DescriptionPanel();
         makerPanel = new MakerPanel(this);
         progressPanel = new ProgressPanel();
