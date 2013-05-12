@@ -6,11 +6,11 @@ package com.pb.shop.client.frames;
 
 
 import com.pb.shop.client.action.AddProductController;
+import com.pb.shop.client.action.ClientSwingWorker;
 import com.pb.shop.client.action.EditProductController;
 import com.pb.shop.client.action.MenuConfigController;
 import com.pb.shop.client.action.MenuConnectController;
 import com.pb.shop.client.action.SearchController;
-import com.pb.shop.client.action.TestListContrller;
 import com.pb.shop.client.panels.CategoryPanel;
 import com.pb.shop.client.panels.DescriptionPanel;
 import com.pb.shop.client.panels.MainMenu;
@@ -18,9 +18,12 @@ import com.pb.shop.client.panels.MakerPanel;
 import com.pb.shop.client.panels.ProgressPanel;
 import com.pb.shop.client.panels.ResultPanel;
 import com.pb.shop.client.panels.SearchPanel;
+import com.pb.shop.data.models.ProductsTableModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -29,6 +32,8 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -115,7 +120,7 @@ public class MainFrame extends JFrame {
         resultPanel.getEditButton().addActionListener(new EditProductController(this));
         mainMenu.getItemConnect().addActionListener(menuConnectController);
         mainMenu.getItemConfig().addActionListener(new MenuConfigController(this));
-        mainMenu.getItemConnect().addActionListener(new TestListContrller(this));
+        mainMenu.getItemExit().addActionListener(actionExit());
         
         categoryPanel.setMinimumSize(new Dimension(100, 100));
         makerPanel.setMinimumSize(new Dimension(100, 100));
@@ -131,6 +136,8 @@ public class MainFrame extends JFrame {
         
         jspLeft.setResizeWeight(0.5);
         jsp.setResizeWeight(0.2);
+        
+        resultPanel.getResultTable().getSelectionModel().addListSelectionListener(selectTableRow());
         
     }
 
@@ -177,5 +184,48 @@ public class MainFrame extends JFrame {
                 new MainFrame();
             }
         });
+    }
+
+    private ListSelectionListener selectTableRow() {
+        return new ListSelectionListener() {
+
+            public void valueChanged(ListSelectionEvent e) {
+                final int selectedRow = resultPanel.getResultTable().getSelectedRow();
+                if(selectedRow == -1) return;
+                        
+                final ProductsTableModel model = 
+                        (ProductsTableModel) resultPanel.getResultTable().getModel();
+                
+                new ClientSwingWorker<String, Void>(MainFrame.this){
+
+                    @Override
+                    protected String doClientQuery() throws Exception {
+                        String url = getClient()
+                                .getUrlProductImage(model.getProduct(selectedRow).getProdID());
+                        descriptionPanel.setUrlImage(url);
+                        return url;
+                        
+                    }
+
+                    @Override
+                    protected void doneQuery() {
+                        getResponse();
+                        descriptionPanel.getDescText()
+                                .setText(model.getProduct(selectedRow)
+                                .getProdDescription());
+                    }
+                    
+                }.execute();
+            }
+        };
+    }
+
+    private ActionListener actionExit() {
+        return new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                MainFrame.this.dispose();
+            }
+        };
     }
 }

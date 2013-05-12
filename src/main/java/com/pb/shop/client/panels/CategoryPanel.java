@@ -19,6 +19,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -55,6 +58,10 @@ public class CategoryPanel extends AbstractPanel {
 
     public CategoryPanel(Component c) {
         setParentComponent(c);
+    }
+
+    public List<Category> getCategories() {
+        return ((CategoriesTreeModel) tree.getModel()).getCategories();
     }
 
     /**
@@ -102,6 +109,8 @@ public class CategoryPanel extends AbstractPanel {
         buttonAdd.addActionListener(addNewCategory());
         buttonDel.addActionListener(delCategory());
         buttonEdit.addActionListener(editCategory());
+        tree.addMouseListener(deselect());
+
     }
 
     /*
@@ -170,11 +179,11 @@ public class CategoryPanel extends AbstractPanel {
                                 categories).getCategory();
                         if (category != null) {
                             CategoriesTreeModel model = (CategoriesTreeModel) tree.getModel();
-                            
+
                             if (categories == null) {
                                 categories = new ArrayList<Category>();
                             }
-                            
+
                             categories.add(category);
                             model.setCategories(categories);
                             CategoryPanel.this.setTreeModel(model);
@@ -234,21 +243,32 @@ public class CategoryPanel extends AbstractPanel {
                                 .getParentCategories(getSelectedCategory());
                         Category category = new CategoryConfigDialog(getParentComponent(),
                                 parentCategories, getSelectedCategory()).getCategory();
-                        
-                        if (category != null) {    
+
+                        if (category != null) {
                             CategoriesTreeModel model = (CategoriesTreeModel) tree.getModel();
-                            
+
                             List<Category> categories = ((CategoriesTreeModel) tree.getModel())
-                                .getCategories();
-                            
+                                    .getCategories();
+
                             categories.remove(getSelectedCategory());
                             categories.add(category);
-                            
+
                             model.setCategories(categories);
                             CategoryPanel.this.setTreeModel(model);
                         }
                     }
                 });
+            }
+        };
+    }
+
+    private MouseListener deselect() {
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    CategoryPanel.this.tree.clearSelection();
+                }
             }
         };
     }

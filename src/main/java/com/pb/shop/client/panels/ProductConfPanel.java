@@ -8,16 +8,21 @@ import com.pb.shop.client.dialogs.ProductAddCategoryDialog;
 import com.pb.shop.client.dialogs.ProductAddMakerDialog;
 import com.pb.shop.model.Category;
 import com.pb.shop.model.Maker;
+import com.pb.shop.model.Product;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.math.BigDecimal;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
@@ -43,10 +48,12 @@ public class ProductConfPanel extends AbstractPanel {
     private JLabel labelName;
     private JPanel panelProp;
     private ModDescriptionPanel modDescriptionPanel;
-
+    
     private Maker maker;
     private Category category;
-    
+    private String pathImage;
+    private Product product;
+
     public ProductConfPanel() {
     }
 
@@ -107,8 +114,6 @@ public class ProductConfPanel extends AbstractPanel {
 
         panelProp.add(checkExist, "gap unrelated, span 2");
 
-
-
         JPanel panelDown = new JPanel(new MigLayout("", "[]", "[]10[]"));
 
         panelDown.add(panelProp, "growx, push, wrap");
@@ -119,10 +124,83 @@ public class ProductConfPanel extends AbstractPanel {
 
     }
 
+    public void setProduct(Product product) {
+        this.product = product;
+        
+        fieldId.setText(product.getProdID().toString());
+        fieldName.setText(product.getProdName());
+        fieldPrice.setText(product.getProdPrice().toString());
+        checkExist.setSelected(product.getProdExist());
+        modDescriptionPanel.getDescText().setText(product.getProdDescription());
+        
+    }
+
+    public JCheckBox getCheckExist() {
+        return checkExist;
+    }
+
+    public JTextField getFieldPrice() {
+        return fieldPrice;
+    }
+
+    public JTextField getFieldId() {
+        return fieldId;
+    }
+
+    public JTextField getFieldName() {
+        return fieldName;
+    }
+
+    public JLabel getLabelCurrentCategory() {
+        return labelCurrentCategory;
+    }
+
+    public JLabel getLabelCurrentMaker() {
+        return labelCurrentMaker;
+    }
+
+    public ModDescriptionPanel getModDescriptionPanel() {
+        return modDescriptionPanel;
+    }
+
+    
+    
+    public int getProductId(){
+        return Integer.parseInt(fieldId.getText());
+    }
+    
+    public String getProductName(){
+        return fieldName.getText();
+    }
+    
+    public BigDecimal getProductPrice(){
+        return new BigDecimal(fieldPrice.getText());
+    }
+    
+    public int getProductCatId(){
+        return category.getCatID();
+    }
+    
+    public int getProductMakId(){
+        return maker.getMakID();
+    }
+    
+    public String getProductDescr(){
+        return modDescriptionPanel.getDescText().getText();
+    }
+    
+    public String getProductImg(){
+        return new String(fieldId.getText()+".jpg");
+    }
+    
+    public boolean isProductExist(){
+        return checkExist.isSelected();
+    }
+            
     public Maker getMaker() {
         return maker;
     }
-
+    
     public void setMaker(Maker maker) {
         this.maker = maker;
         labelCurrentMaker.setText(maker.getMakName());
@@ -137,8 +215,7 @@ public class ProductConfPanel extends AbstractPanel {
         labelCurrentCategory.setText(category.getCatName());
     }
 
-    
-    private class ModDescriptionPanel extends DescriptionPanel {
+    public class ModDescriptionPanel extends DescriptionPanel {
 
         private JButton buttonLoadImg;
         private JButton buttonDelImg;
@@ -166,6 +243,8 @@ public class ProductConfPanel extends AbstractPanel {
             panelButton.setLayout(new GridLayout(1, 2));
             buttonCtegory.addActionListener(selectCategory());
             buttonMaker.addActionListener(selectMaker());
+            buttonLoadImg.addActionListener(loadImage());
+            buttonDelImg.addActionListener(deleteImage());
         }
 
         @Override
@@ -190,6 +269,28 @@ public class ProductConfPanel extends AbstractPanel {
                 public void actionPerformed(ActionEvent e) {
                     new ProductAddCategoryDialog(ProductConfPanel.this.getParentComponent(),
                             ProductConfPanel.this);
+                }
+            };
+        }
+
+        private ActionListener loadImage() {
+            return new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    int i = fileChooser.showOpenDialog(null);
+
+                    if (i == JFileChooser.APPROVE_OPTION) {
+                        pathImage = fileChooser.getSelectedFile().getAbsolutePath();
+                        ModDescriptionPanel.this.setImage(pathImage);
+                    }
+                }
+            };
+        }
+
+        private ActionListener deleteImage() {
+            return new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ModDescriptionPanel.this.delImage();
                 }
             };
         }

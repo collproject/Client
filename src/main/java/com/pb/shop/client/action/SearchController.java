@@ -22,6 +22,7 @@ import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import sun.security.pkcs11.P11TlsKeyMaterialGenerator;
 
 /**
  *
@@ -37,27 +38,41 @@ public class SearchController implements ActionListener{
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        new SwingWorker<ProductsTableModel, Void>(){
-
+                new ClientSwingWorker<Void, Void>(mainFrame) {
             @Override
-            protected ProductsTableModel doInBackground() throws Exception {
-                Client c = new Client("http://localhost:7375/shop-app-server/admin");
-                List<Category> allCategories = c.getAllCategories();
-                List<Maker> allMakers = c.getAllMakers();
-                List<Product> allProducts = c.getAllProducts();
-                return new ProductsTableModel(allProducts, allMakers, allCategories);
-            }
-
-            @Override
-            protected void done() {
-                JTable table = mainFrame.getResultPanel().getResultTable();
-                try {
-                     table.setModel(get());                 
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ExecutionException ex) {
-                    Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+            protected Void doClientQuery() throws Exception {
+                
+                Maker selectedMaker = mainFrame.getMakerPanel().getSelectedMaker();
+                Category selectedCategory = mainFrame.getCategoryPanel().getSelectedCategory();
+                
+                String catId = null;
+                String makId = null;
+                
+                if(selectedMaker != null){
+                    makId = selectedMaker.getMakID().toString();
                 }
+                if(selectedCategory != null){
+                    catId = selectedCategory.getCatID().toString();
+                }
+                
+                String name = mainFrame.getSearchPanel().getProdNameField().getText();
+                String fromPrice = mainFrame.getSearchPanel().getPriceFromField().getText();
+                String toPrice = mainFrame.getSearchPanel().getPriceToField().getText();
+                        
+                List<Product> products = getClient().getProducts(catId, makId, name, fromPrice, toPrice);
+                
+                List<Maker> makers = mainFrame.getMakerPanel().getMakers();
+                List<Category> categories = mainFrame.getCategoryPanel().getCategories();
+                
+                mainFrame.getResultPanel()
+                        .getResultTable()
+                        .setModel(new ProductsTableModel(products, makers, categories));
+                
+                return null;
+            }
+            @Override
+            protected void doneQuery() {
+                getResponse();
             }
         }.execute();
     }

@@ -23,14 +23,14 @@ public class ProductsTableModel extends AbstractTableModel {
     private List<Category> categories;
     private Map<Integer, String> makersNames;
     private Map<Integer, String> categoriesNames;
-    private static String [] columnsNames = new String[]{"ИН", "Название", "Категория", "Производитель", "Цена", "Наличие"}; 
+    private static String[] columnsNames = new String[]{"ИН", "Название", "Категория", "Производитель", "Цена", "Наличие"};
 
     public ProductsTableModel(List<Product> products, List<Maker> makers, List<Category> categorys) {
         this.products = products;
         this.makers = makers;
         this.categories = categorys;
         makersNames = new HashMap<Integer, String>();
-        categoriesNames=new HashMap<Integer, String>();
+        categoriesNames = new HashMap<Integer, String>();
         initmakersNames();
         initcategorysNames();
 
@@ -69,7 +69,7 @@ public class ProductsTableModel extends AbstractTableModel {
             case 4:
                 return products.get(rowIndex).getProdPrice();
             case 5:
-                return products.get(rowIndex).getProdExist().toString();
+                return (products.get(rowIndex).getProdExist()) ? "Есть" : "Нет";
             default:
                 return null;
         }
@@ -79,7 +79,24 @@ public class ProductsTableModel extends AbstractTableModel {
     public String getColumnName(int column) {
         return columnsNames[column];
     }
-    
-    
-}
 
+    public void deleteProduct(Product p) {
+        products.remove(p);
+        this.fireTableDataChanged();
+    }
+
+    public void addProduct(Product p) {
+        products.add(p);
+        this.fireTableDataChanged();
+    }
+    
+   public void addProduct(int index ,Product p) {
+        products.set(index, p);
+        this.fireTableDataChanged();
+    }
+
+
+    public Product getProduct(int row) {
+        return products.get(row);
+    }
+}

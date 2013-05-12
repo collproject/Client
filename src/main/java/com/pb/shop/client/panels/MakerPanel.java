@@ -20,6 +20,9 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -82,6 +85,7 @@ public class MakerPanel extends AbstractPanel {
         buttonAdd.addActionListener(addNewMaker());
         buttonDel.addActionListener(delMaker());
         buttonEdit.addActionListener(editMaker());
+        makerList.addMouseListener(deselect());
     }
 
     @Override
@@ -113,8 +117,16 @@ public class MakerPanel extends AbstractPanel {
         return buttonEdit;
     }
 
-    public JList getMakerList() {
+    public JList<Maker> getMakerList() {
         return makerList;
+    }
+
+    public List<Maker> getMakers() {
+        return ((MakersJListModel) makerList.getModel()).getList();
+    }
+
+    public Maker getSelectedMaker() {
+        return makerList.getSelectedValue();
     }
 
     private ActionListener addNewMaker() {
@@ -179,7 +191,7 @@ public class MakerPanel extends AbstractPanel {
                     public void run() {
                         Maker maker = new MakerConfigDialog(getParentComponent(),
                                 makerList.getSelectedValue()).getMaker();
-                        
+
                         //Если изменения прошли успешно, заменяем элемент в списке на новый
                         if (maker != null) {
                             List<Maker> list = ((MakersJListModel) makerList.getModel()).getList();
@@ -190,6 +202,19 @@ public class MakerPanel extends AbstractPanel {
                     }
                 });
             }
+        };
+    }
+
+    private MouseListener deselect() {
+        return new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getButton() == MouseEvent.BUTTON3){
+                    MakerPanel.this.makerList.clearSelection();
+                }
+            }
+            
         };
     }
 }

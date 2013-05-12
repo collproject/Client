@@ -8,6 +8,8 @@ import com.pb.shop.client.api.Client;
 import com.pb.shop.client.frames.MainFrame;
 import com.pb.shop.model.Category;
 import com.pb.shop.data.models.CategoriesTreeModel;
+import com.pb.shop.data.models.MakersJListModel;
+import com.pb.shop.model.Maker;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -31,17 +33,24 @@ public class MenuConnectController implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        new ClientSwingWorker<CategoriesTreeModel, Void>(mainFrame) {
+        new ClientSwingWorker<Void, Void>(mainFrame) {
             @Override
-            protected CategoriesTreeModel doClientQuery() throws Exception {
+            protected Void doClientQuery() throws Exception {
                 List<Category> allCategories = getClient().getAllCategories();
-                return new CategoriesTreeModel(allCategories);
+                List<Maker> allMakers = getClient().getAllMakers();
+                
+                CategoriesTreeModel treeModel = new CategoriesTreeModel(allCategories);
+                MakersJListModel listModel = new MakersJListModel(allMakers);
+                
+                mainFrame.getCategoryPanel().setTreeModel(treeModel);
+                mainFrame.getMakerPanel().getMakerList().setModel(listModel);
+                return null;
+                
             }
 
             @Override
             protected void doneQuery() {
-                mainFrame.getCategoryPanel().setTreeModel(getResponse());
-
+                getResponse();
             }
         }.execute();
     }
